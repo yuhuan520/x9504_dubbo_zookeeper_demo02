@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.java.zd.mapper.GoodsDetailMapper">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="GoodsDetailEntity" id="goodsDetailMap">
+        <result property="id" column="id"/>
+        <result property="sortId" column="sort_id"/>
+        <result property="name" column="name"/>
+        <result property="address" column="address"/>
+        <result property="price" column="price"/>
+        <result property="createDate" column="create_date"/>
+        <result property="remaining" column="remaining"/>
+    </resultMap>
+  
+  <!--要查询的字段-->  
+  <sql id="sel_GoodsDetailColumns_List" > 
+  	  id ,        
+   sort_id  ,        
+  name ,        
+  address ,        
+  price ,        
+   create_date  ,        
+  remaining         
+  
+  </sql>
+  
+  <!--要添加的字段-->
+  <sql id="ins_GoodsDetailColumns_List" >
+       #{id},   #{sortId},   #{name},   #{address},   #{price},   #{createDate},   #{remaining}   </sql> 
+  
+  <!--要修改的字段-->
+  <sql id="upd_GoodsDetailColumns_List" >
+    <set>
+    <if test="t.sortId != null">sort_id = #{t.sortId}, </if>
+    <if test="t.name != null">name = #{t.name}, </if>
+    <if test="t.address != null">address = #{t.address}, </if>
+    <if test="t.price != null">price = #{t.price}, </if>
+    <if test="t.createDate != null">create_date = #{t.createDate}, </if>
+    <if test="t.remaining != null">remaining = #{t.remaining}</if>
+	</set>
+	where id = #{t.id}
+  </sql> 
+  
+  <!--定义删除的条件-->
+  <sql id="del_GoodsDetailPramas_List">
+    <where>
+    <if test="t.id != null">and id = #{t.id}</if>
+    <if test="t.sortId != null">and sort_id = #{t.sortId}</if>
+    <if test="t.name != null">and name = #{t.name}</if>
+    <if test="t.address != null">and address = #{t.address}</if>
+    <if test="t.price != null">and price = #{t.price}</if>
+    <if test="t.createDate != null">and create_date = #{t.createDate}</if>
+    <if test="t.remaining != null">and remaining = #{t.remaining}</if>
+	</where>
+  </sql> 
+  
+  <!--定义查询的条件-->
+  <sql id="sel_GoodsDetailPramas_List">
+    <where>
+    <if test="t.id != null">and id = #{t.id}</if>
+    <if test="t.sortId != null">and sort_id = #{t.sortId}</if>
+    <if test="t.name != null">and name = #{t.name}</if>
+    <if test="t.address != null">and address = #{t.address}</if>
+    <if test="t.price != null">and price = #{t.price}</if>
+    <if test="t.createDate != null">and create_date = #{t.createDate}</if>
+    <if test="t.remaining != null">and remaining = #{t.remaining}</if>
+	</where>
+  </sql>
+
+    <!--添加-->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into goods_detail values (<include refid="ins_GoodsDetailColumns_List" />)
+    </insert>
+
+    <!--修改-->
+    <update id="update">
+        update goods_detail <include refid="upd_GoodsDetailColumns_List" />
+    </update>
+
+    <!--根据条件删除-->
+    <delete id="delete">
+        delete from goods_detail <include refid="del_GoodsDetailPramas_List" />
+    </delete>
+
+    <!--批量删除-->
+    <delete id="deleteBatch">
+        delete from goods_detail where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!--根据主键id查询单个对象-->
+	<select id="queryObjectById" resultMap="goodsDetailMap">
+		select  <include refid="sel_GoodsDetailColumns_List" />  from goods_detail where id = #{id}
+	</select>
+	
+	<!--查询所有对象-->
+	<select id="queryAll" resultMap="goodsDetailMap">
+		select  <include refid="sel_GoodsDetailColumns_List" />  from goods_detail
+    </select>
+
+    <!--根据条件（无条件）查询多个对象-->
+	<select id="queryManyByPramas" resultMap="goodsDetailMap">
+		select  <include refid="sel_GoodsDetailColumns_List" />  from goods_detail <include refid="sel_GoodsDetailPramas_List" />
+	</select>
+	
+	<!--根据条件（无条件）分页查询-->
+	<select id="queryListByPramas" resultMap="goodsDetailMap">
+		select  <include refid="sel_GoodsDetailColumns_List" />  from goods_detail <include refid="sel_GoodsDetailPramas_List" /> order by id desc
+	</select>
+
+    <!--根据条件查询单条数据-->
+    <select id="queryObjectByPramas" resultMap="goodsDetailMap">
+        select  <include refid="sel_GoodsDetailColumns_List" />  from goods_detail <include refid="sel_GoodsDetailPramas_List" />
+    </select>
+	
+	<!--根据条件（无条件）查询数据条数-->
+ 	<select id="queryTotalByPramas" resultType="java.lang.Long">
+		select count(*) from goods_detail <include refid="sel_GoodsDetailPramas_List" />
+	</select>
+	
+
+
+</mapper>

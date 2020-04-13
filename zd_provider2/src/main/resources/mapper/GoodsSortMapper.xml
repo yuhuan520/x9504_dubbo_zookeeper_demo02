@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.java.zd.mapper.GoodsSortMapper">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="GoodsSortEntity" id="goodsSortMap">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+    </resultMap>
+  
+  <!--要查询的字段-->  
+  <sql id="sel_GoodsSortColumns_List" > 
+  	  id ,        
+  name         
+  
+  </sql>
+  
+  <!--要添加的字段-->
+  <sql id="ins_GoodsSortColumns_List" >
+       #{id},   #{name}   </sql> 
+  
+  <!--要修改的字段-->
+  <sql id="upd_GoodsSortColumns_List" >
+    <set>
+    <if test="t.name != null">name = #{t.name}</if>
+	</set>
+	where id = #{t.id}
+  </sql> 
+  
+  <!--定义删除的条件-->
+  <sql id="del_GoodsSortPramas_List">
+    <where>
+    <if test="t.id != null">and id = #{t.id}</if>
+    <if test="t.name != null">and name = #{t.name}</if>
+	</where>
+  </sql> 
+  
+  <!--定义查询的条件-->
+  <sql id="sel_GoodsSortPramas_List">
+    <where>
+    <if test="t.id != null">and id = #{t.id}</if>
+    <if test="t.name != null">and name = #{t.name}</if>
+	</where>
+  </sql>
+
+    <!--添加-->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into goods_sort values (<include refid="ins_GoodsSortColumns_List" />)
+    </insert>
+
+    <!--修改-->
+    <update id="update">
+        update goods_sort <include refid="upd_GoodsSortColumns_List" />
+    </update>
+
+    <!--根据条件删除-->
+    <delete id="delete">
+        delete from goods_sort <include refid="del_GoodsSortPramas_List" />
+    </delete>
+
+    <!--批量删除-->
+    <delete id="deleteBatch">
+        delete from goods_sort where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!--根据主键id查询单个对象-->
+	<select id="queryObjectById" resultMap="goodsSortMap">
+		select  <include refid="sel_GoodsSortColumns_List" />  from goods_sort where id = #{id}
+	</select>
+	
+	<!--查询所有对象-->
+	<select id="queryAll" resultMap="goodsSortMap">
+		select  <include refid="sel_GoodsSortColumns_List" />  from goods_sort
+    </select>
+
+    <!--根据条件（无条件）查询多个对象-->
+	<select id="queryManyByPramas" resultMap="goodsSortMap">
+		select  <include refid="sel_GoodsSortColumns_List" />  from goods_sort <include refid="sel_GoodsSortPramas_List" />
+	</select>
+	
+	<!--根据条件（无条件）分页查询-->
+	<select id="queryListByPramas" resultMap="goodsSortMap">
+		select  <include refid="sel_GoodsSortColumns_List" />  from goods_sort <include refid="sel_GoodsSortPramas_List" /> order by id desc
+	</select>
+
+    <!--根据条件查询单条数据-->
+    <select id="queryObjectByPramas" resultMap="goodsSortMap">
+        select  <include refid="sel_GoodsSortColumns_List" />  from goods_sort <include refid="sel_GoodsSortPramas_List" />
+    </select>
+	
+	<!--根据条件（无条件）查询数据条数-->
+ 	<select id="queryTotalByPramas" resultType="java.lang.Long">
+		select count(*) from goods_sort <include refid="sel_GoodsSortPramas_List" />
+	</select>
+	
+
+
+</mapper>
